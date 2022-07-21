@@ -76,12 +76,20 @@ func FormatStr(jsonstr string) map[string]string {
 	Nslice := strings.Split(jsonstr, "\n")
 	for i := 0; i < len(Nslice); i++ {
 		if strings.Index(Nslice[i], ":") != -1 {
+			if strings.TrimSpace(Nslice[i])[:6] == "Origin" {
 
-			a := strings.TrimSpace(Nslice[i][:strings.LastIndex(Nslice[i], ":")])
-			b := strings.TrimSpace(Nslice[i][strings.LastIndex(Nslice[i], ":")+1:])
-			c := strings.Trim(a, "\"")
-			d := strings.Trim(b, "\"")
-			DataMap[c] = d
+				a := strings.TrimSpace(Nslice[i][:strings.Index(Nslice[i], ":")])
+				b := strings.TrimSpace(Nslice[i][strings.Index(Nslice[i], ":")+1:])
+				c := strings.Trim(a, "\"")
+				d := strings.Trim(b, "\"")
+				DataMap[c] = d
+			} else {
+				a := strings.TrimSpace(Nslice[i][:strings.LastIndex(Nslice[i], ":")])
+				b := strings.TrimSpace(Nslice[i][strings.LastIndex(Nslice[i], ":")+1:])
+				c := strings.Trim(a, "\"")
+				d := strings.Trim(b, "\"")
+				DataMap[c] = d
+			}
 		}
 	}
 	return DataMap
