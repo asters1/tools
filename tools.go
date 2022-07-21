@@ -9,6 +9,18 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+func GetHeader(header string) http.Header {
+
+	HeaderMap := FormatStr(header)
+	HEADER := make(http.Header)
+	HEADER.Set("User-Agent", `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36`)
+	for i, j := range HeaderMap {
+		HEADER.Set(i, j)
+	}
+
+	return HEADER
+}
+
 func RequestClient(URL string, METHOD string, HEADER string, DATA string) string {
 	HeaderMap := FormatStr(HEADER)
 	DataMap := FormatStr(DATA)
