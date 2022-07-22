@@ -1,13 +1,48 @@
 package tools
 
 import (
+	"bufio"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 
 	uuid "github.com/satori/go.uuid"
 )
+
+func GetConfig(path string) (ConfigMap map[string]string, err error) {
+	ConfigMap = make(map[string]string)
+	File, err := os.Open(path)
+	if err != nil {
+		fmt.Println("打开文件[" + path + "]失败!请检查...")
+		return
+	}
+	defer File.Close()
+	reader := bufio.NewReader(File)
+	var line string
+	for {
+		line, err = reader.ReadString('\n')
+		if err == io.EOF {
+			break
+		}
+		if strings.Index(strings.TrimSpace(line), "#") == 0 {
+			line = ""
+		}
+		if strings.Index(line, ":") > 0 {
+
+			if strings.Index(line, "#") > -1 {
+				line = line[:strings.Index(line, "#")] + "\r\n"
+			}
+			//			fmt.Print(line)
+			ConfigMap[strings.TrimSpace(line[:strings.Index(line, ":")])] = strings.TrimSpace(line[strings.Index(line, ":")+1 : len(line)-1])
+		}
+	}
+
+	return
+}
 
 func GetHeader(header string) http.Header {
 
