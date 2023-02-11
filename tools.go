@@ -78,7 +78,6 @@ func RequestClient(URL string, METHOD string, HEADER string, DATA string) string
 		URL,
 		strings.NewReader(FormatData),
 	)
-	fmt.Println(requset.Header.Get("Content-Type"))
 	if METHOD == http.MethodPost && requset.Header.Get("Content-Type") == "" {
 		requset.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
