@@ -45,7 +45,6 @@ func GetConfig(path string) (ConfigMap map[string]string, err error) {
 }
 
 func GetHeader(header string) http.Header {
-
 	HeaderMap := FormatStr(header)
 	HEADER := make(http.Header)
 	HEADER.Set("User-Agent", `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36`)
@@ -56,6 +55,15 @@ func GetHeader(header string) http.Header {
 	return HEADER
 }
 
+func IsExists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	} else {
+		return false
+	}
+}
+
 func RequestClient(URL string, METHOD string, HEADER string, DATA string) string {
 	HeaderMap := FormatStr(HEADER)
 	DataMap := FormatStr(DATA)
@@ -64,7 +72,6 @@ func RequestClient(URL string, METHOD string, HEADER string, DATA string) string
 		METHOD = http.MethodGet
 	} else if METHOD == "post" {
 		METHOD = http.MethodPost
-
 	}
 	FormatData := ""
 	for i, j := range DataMap {
@@ -89,23 +96,24 @@ func RequestClient(URL string, METHOD string, HEADER string, DATA string) string
 	body_bit, _ := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 	return string(body_bit)
-
 }
+
 func Re(Str string, str string) []string {
 	digitsRegexp := regexp.MustCompile(str)
 	array := digitsRegexp.FindStringSubmatch(Str)
 	return array
-
 }
-func GetUUID() string {
 
+func GetUUID() string {
 	u1 := uuid.NewV4()
 	return u1.String()
 }
+
 func WriteFile(name string, str string) {
 	ystr := []byte(str)
 	ioutil.WriteFile(name, ystr, 0666)
 }
+
 func FormatStr(jsonstr string) map[string]string {
 	DataMap := make(map[string]string)
 	Nslice := strings.Split(jsonstr, "\n")
@@ -128,5 +136,4 @@ func FormatStr(jsonstr string) map[string]string {
 		}
 	}
 	return DataMap
-
 }
